@@ -1,0 +1,11 @@
+services:
+  summarizer:
+    build: .
+    volumes:
+      # Mount local directories to the container
+      - ./data/input:/app/data/input:ro  # Read-only for security
+      - ./data/output:/app/data/output
+      - ./logs:/app/logs
+    # Optional: User ID mapping to ensure generated files belong to the host user
+    # Can be removed on Windows Docker Desktop (permissions are handled automatically)
+    # user: "${UID}:${GID}"

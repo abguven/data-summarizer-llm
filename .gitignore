@@ -1,0 +1,24 @@
+# --- Python ---
+__pycache__/
+*.pyc
+.venv/
+.env
+
+# --- IDE & OS ---
+.vscode/
+.idea/
+.DS_Store
+Thumbs.db
+
+# --- Docker ---
+docker-compose.override.yml
+
+# --- Project Data & Logs ---
+data/input/*
+data/output/*
+logs/*
+temp/*
+
+!data/input/.gitkeep
+!data/output/.gitkeep
+!logs/.gitkeep
