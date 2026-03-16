@@ -17,13 +17,16 @@ RUN pip install --prefix=/install --no-cache-dir -r requirements.txt
 ARG PYTHON_VERSION=3.14.3
 FROM python:${PYTHON_VERSION}-slim
 
+# Apply all available OS security patches
+RUN apt-get update && apt-get upgrade -y && rm -rf /var/lib/apt/lists/*
+
 # Metadata OCI
 LABEL org.opencontainers.image.title="Data Summarizer for LLM"
 LABEL org.opencontainers.image.description="CLI tool to analyze and summarize datasets (CSV, Excel, JSON) for LLM context injection."
 LABEL org.opencontainers.image.authors="abguven"
 LABEL org.opencontainers.image.source="https://github.com/abguven/data-summarizer-llm"
 LABEL org.opencontainers.image.licenses="MIT"
-LABEL org.opencontainers.image.version="1.2"
+LABEL org.opencontainers.image.version="1.3"
 
 ENV PYTHONDONTWRITEBYTECODE=1
 ENV PYTHONUNBUFFERED=1
