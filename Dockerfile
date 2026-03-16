@@ -15,6 +15,7 @@ RUN pip install --prefix=/install --no-cache-dir -r requirements.txt
 
 # --- Final stage ---
 ARG PYTHON_VERSION=3.14.3
+ARG APP_VERSION=dev
 FROM python:${PYTHON_VERSION}-slim
 
 # Apply all available OS security patches
@@ -26,7 +27,7 @@ LABEL org.opencontainers.image.description="CLI tool to analyze and summarize da
 LABEL org.opencontainers.image.authors="abguven"
 LABEL org.opencontainers.image.source="https://github.com/abguven/data-summarizer-llm"
 LABEL org.opencontainers.image.licenses="MIT"
-LABEL org.opencontainers.image.version="1.3"
+LABEL org.opencontainers.image.version="${APP_VERSION}"
 
 ENV PYTHONDONTWRITEBYTECODE=1
 ENV PYTHONUNBUFFERED=1
