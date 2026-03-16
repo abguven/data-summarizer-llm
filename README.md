@@ -2,10 +2,11 @@
 
 > **Generate compact, context-rich dataset summaries optimized for Large Language Models (Gemini, ChatGPT, Claude).**
 
-![Python](https://img.shields.io/badge/Python-3.10-blue?logo=python)
+![Python](https://img.shields.io/badge/Python-3.14-blue?logo=python)
 ![Polars](https://img.shields.io/badge/Polars-Fast-orange)
 ![Docker](https://img.shields.io/badge/Docker-Ready-2496ED?logo=docker)
 ![License](https://img.shields.io/badge/License-MIT-green)
+![CI](https://github.com/abguven/data-summarizer-llm/actions/workflows/ci.yml/badge.svg)
 
 ## 🧐 Why this tool?
 When working with LLMs (like Gemini or Claude), you often need to provide context about your data without uploading the entire 100MB CSV file (which consumes tokens and context window).

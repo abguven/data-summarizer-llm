@@ -1,0 +1,6 @@
+name,age,city,salary,is_active
+Alice,30,Paris,45000.5,true
+Bob,25,Lyon,,false
+Charlie,35,Marseille,62000.0,true
+Diana,28,Paris,38500.75,true
+Eve,,Bordeaux,52000.0,false

@@ -13,11 +13,14 @@ Thumbs.db
 # --- Docker ---
 docker-compose.override.yml
 
+# --- Test outputs ---
+tests/output/
+
 # --- Project Data & Logs ---
 data/input/*
 data/output/*
 logs/*
-temp/*
+temp/
 
 !data/input/.gitkeep
 !data/output/.gitkeep
