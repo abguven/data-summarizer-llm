@@ -19,6 +19,7 @@ echo "=== Image: $IMAGE ==="
 echo ""
 echo "=== Run container with test data ==="
 mkdir -p "$TEST_OUTPUT"
+chmod 777 "$TEST_OUTPUT"
 rm -f "$TEST_OUTPUT"/*.md
 
 # MSYS_NO_PATHCONV=1 prevents Git Bash from converting Unix paths to Windows paths
