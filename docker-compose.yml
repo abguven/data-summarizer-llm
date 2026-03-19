@@ -1,6 +1,6 @@
 services:
   summarizer:
-    build: .
+    image: abguven/data-summarizer:latest
     volumes:
       # Mount local directories to the container
       - ./data/input:/app/data/input:ro  # Read-only for security
