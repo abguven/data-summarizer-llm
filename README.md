@@ -26,7 +26,7 @@ Analysis is handled by [Polars](https://pola.rs/), a Rust-based DataFrame engine
 
 ---
 
-![Architecture Schema](docs/architecture_schema.png)
+![Architecture Schema](assets/architecture_schema.png)
 
 ---
 
