@@ -59,7 +59,6 @@ Copy any `.csv`, `.xlsx`, `.xls`, `.json`, or `.parquet` files into `input/`.
 docker run --rm \
   -v "$(pwd)/input:/app/data/input" \
   -v "$(pwd)/output:/app/data/output" \
-  -v "$(pwd)/logs:/app/logs" \
   abguven/data-summarizer:latest
 ```
 
@@ -69,9 +68,10 @@ docker run --rm \
 docker run --rm `
   -v "${PWD}/input:/app/data/input" `
   -v "${PWD}/output:/app/data/output" `
-  -v "${PWD}/logs:/app/logs" `
   abguven/data-summarizer:latest
 ```
+
+> **Want to keep execution logs?** Add `-v "$(pwd)/logs:/app/logs"` to the command (create the `logs/` folder first with `mkdir logs`).
 
 That's it. A `SUMMARY_<filename>.md` file is generated in `output/` for each file processed.
 
