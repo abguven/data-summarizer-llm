@@ -1,25 +1,28 @@
-.PHONY: help run demo test build
+.PHONY: help build demo test
+
+LOCAL_IMAGE = data-summarizer:local
 
 help: ## Show available commands
 	@echo ""
-	@echo "  Data Summarizer for LLMs - Available commands:"
+	@echo "  Data Summarizer for LLMs — Developer commands:"
 	@echo ""
 	@grep -E '^[a-zA-Z_-]+:.*?## .*$$' $(MAKEFILE_LIST) | awk 'BEGIN {FS = ":.*?## "}; {printf "  \033[36mmake %-10s\033[0m %s\n", $$1, $$2}'
 	@echo ""
 
-run: ## Run the summarizer on data/input/ -> results in data/output/
-	docker compose up --pull always
+build: ## Build the Docker image locally (tagged as data-summarizer:local)
+	docker build -t $(LOCAL_IMAGE) .
 
-demo: ## Run with sample data (copies CSV + JSON from tests/data/)
+demo: ## Copy sample data into data/input/ and run the local image
 	@cp tests/data/sample.csv data/input/sample.csv
 	@cp tests/data/sample.json data/input/sample.json
 	@echo "Sample files copied to data/input/"
-	docker compose up --pull always
+	docker run --rm \
+		-v "$(PWD)/data/input:/app/data/input" \
+		-v "$(PWD)/data/output:/app/data/output" \
+		-v "$(PWD)/logs:/app/logs" \
+		$(LOCAL_IMAGE)
 	@echo ""
-	@echo "Done! Check data/output/ for your summaries."
+	@echo "Done! Check data/output/ for the generated summaries."
 
-test: ## Run the functional test suite
-	bash tests/run_tests.sh
-
-build: ## Build the Docker image locally (for development)
-	docker build -t data-summarizer:local .
+test: ## Run the functional test suite against the local image
+	bash tests/run_tests.sh $(LOCAL_IMAGE)
