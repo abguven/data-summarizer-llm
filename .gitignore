@@ -13,6 +13,9 @@ Thumbs.db
 # --- Docker ---
 docker-compose.override.yml
 
+# --- Local docs (Docker Hub overview, notes, etc.) ---
+docs/
+
 # --- Test outputs ---
 tests/output/
 

@@ -1,0 +1,6 @@
+# Force LF for shell scripts (prevents CRLF issues on Linux/Mac)
+*.sh text eol=lf
+Makefile text eol=lf
+
+# Auto-detect everything else
+* text=auto

@@ -13,22 +13,24 @@ import sys
 import logging
 import math
 
-# Path Configuration (Hardcoded for Docker environment)
-INPUT_DIR = "/app/data/input"
-OUTPUT_DIR = "/app/data/output"
-LOG_DIR = "/app/logs"
+# Path Configuration — overridable via env vars (defaults work for local dev)
+INPUT_DIR = os.getenv("INPUT_DIR", "data/input")
+OUTPUT_DIR = os.getenv("OUTPUT_DIR", "data/output")
+LOG_DIR = os.getenv("LOG_DIR", "logs")
 LOG_FILE = os.path.join(LOG_DIR, "execution.log")
 
 # Logging Configuration
 def setup_logging():
-    os.makedirs(LOG_DIR, exist_ok=True)
+    handlers = [logging.StreamHandler(sys.stdout)]
+    try:
+        os.makedirs(LOG_DIR, exist_ok=True)
+        handlers.append(logging.FileHandler(LOG_FILE))
+    except PermissionError:
+        pass  # Log directory not writable (e.g. no -v logs mount), stdout only
     logging.basicConfig(
         level=logging.INFO,
         format="%(asctime)s [%(levelname)s] %(message)s",
-        handlers=[
-            logging.FileHandler(LOG_FILE),
-            logging.StreamHandler(sys.stdout)
-        ]
+        handlers=handlers
     )
 
 def get_ascii_histogram(series: pl.Series, bins: int = 10) -> str:
