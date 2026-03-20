@@ -140,6 +140,9 @@ This section is for contributors who want to modify the source code.
 git clone https://github.com/abguven/data-summarizer-llm.git
 cd data-summarizer-llm
 
+# Ubuntu/Debian only — install venv if not already available
+# sudo apt install python3-venv
+
 python -m venv .venv
 source .venv/bin/activate        # Windows: .venv\Scripts\activate
 
