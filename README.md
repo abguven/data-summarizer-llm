@@ -140,20 +140,37 @@ This section is for contributors who want to modify the source code.
 git clone https://github.com/abguven/data-summarizer-llm.git
 cd data-summarizer-llm
 
-# Ubuntu/Debian only — install venv if not already available
-# sudo apt install python3-venv
+# Create the local data folders
+mkdir -p data/input data/output
+```
 
-python3 -m venv .venv            # Linux/macOS
-# python -m venv .venv           # Windows
-source .venv/bin/activate        # Windows: .venv\Scripts\activate
+**Linux / macOS:**
 
+```bash
+# Ubuntu/Debian: install venv if missing
+sudo apt install python3-venv
+
+python3 -m venv .venv
+source .venv/bin/activate
 pip install -r requirements.txt
 python src/summarize_dataset.py
 ```
 
-> Note: when running locally without Docker, adjust the `INPUT_DIR` / `OUTPUT_DIR` paths inside `src/summarize_dataset.py`.
+**Windows (PowerShell):**
 
-### Makefile commands
+```powershell
+python -m venv .venv
+.venv\Scripts\activate
+pip install -r requirements.txt
+python src/summarize_dataset.py
+```
+
+Drop your test files into `data/input/` — summaries will appear in `data/output/`.
+
+### Makefile commands (Linux / macOS only)
+
+> The `Makefile` uses bash and Docker CLI — it is **not compatible with Windows PowerShell**.
+> Windows developers should use the `docker build` and `docker run` commands directly.
 
 | Command | Description |
 | :--- | :--- |
@@ -162,7 +179,7 @@ python src/summarize_dataset.py
 | `make test` | Run the functional test suite against the local image |
 | `make help` | List all available commands |
 
-### Workflow
+### Workflow (Linux / macOS)
 
 ```bash
 # 1. Build your local image after making changes
