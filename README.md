@@ -143,7 +143,8 @@ cd data-summarizer-llm
 # Ubuntu/Debian only — install venv if not already available
 # sudo apt install python3-venv
 
-python -m venv .venv
+python3 -m venv .venv            # Linux/macOS
+# python -m venv .venv           # Windows
 source .venv/bin/activate        # Windows: .venv\Scripts\activate
 
 pip install -r requirements.txt
