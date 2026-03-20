@@ -42,6 +42,9 @@ mkdir -p input output
 
 That's it — `input/` for your files, `output/` for the summaries.
 
+> **⚠️ Do not skip this step — especially on Linux / macOS.**
+> If these folders don't exist before running the container, Docker creates them as `root` and the container won't be able to write your results. See [Troubleshooting](#-troubleshooting) if you hit a `PermissionError`.
+
 ### Step 2 — Drop your files
 
 Copy any `.csv`, `.xlsx`, `.xls`, `.json`, or `.parquet` files into `input/`.
