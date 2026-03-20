@@ -13,10 +13,10 @@ import sys
 import logging
 import math
 
-# Path Configuration (Hardcoded for Docker environment)
-INPUT_DIR = "/app/data/input"
-OUTPUT_DIR = "/app/data/output"
-LOG_DIR = "/app/logs"
+# Path Configuration — overridable via env vars (defaults work for local dev)
+INPUT_DIR = os.getenv("INPUT_DIR", "data/input")
+OUTPUT_DIR = os.getenv("OUTPUT_DIR", "data/output")
+LOG_DIR = os.getenv("LOG_DIR", "logs")
 LOG_FILE = os.path.join(LOG_DIR, "execution.log")
 
 # Logging Configuration

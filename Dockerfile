@@ -15,8 +15,9 @@ RUN pip install --prefix=/install --no-cache-dir -r requirements.txt
 
 # --- Final stage ---
 ARG PYTHON_VERSION=3.14.3
-ARG APP_VERSION=dev
 FROM python:${PYTHON_VERSION}-slim
+
+ARG APP_VERSION=dev
 
 # Apply all available OS security patches
 RUN apt-get update && apt-get upgrade -y && rm -rf /var/lib/apt/lists/*
@@ -31,6 +32,9 @@ LABEL org.opencontainers.image.version="${APP_VERSION}"
 
 ENV PYTHONDONTWRITEBYTECODE=1
 ENV PYTHONUNBUFFERED=1
+ENV INPUT_DIR=/app/data/input
+ENV OUTPUT_DIR=/app/data/output
+ENV LOG_DIR=/app/logs
 
 WORKDIR /app
 
