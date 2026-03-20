@@ -140,6 +140,9 @@ This section is for contributors who want to modify the source code.
 git clone https://github.com/abguven/data-summarizer-llm.git
 cd data-summarizer-llm
 
+python -m venv .venv
+source .venv/bin/activate        # Windows: .venv\Scripts\activate
+
 pip install -r requirements.txt
 python src/summarize_dataset.py
 ```
