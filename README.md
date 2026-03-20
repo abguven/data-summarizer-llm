@@ -36,16 +36,11 @@ Analysis is handled by [Polars](https://pola.rs/), a Rust-based DataFrame engine
 
 ### Step 1 — Create your working folders
 
-```text
-my_project/
-├── input/    <-- drop your CSV / Excel / JSON files here
-├── output/   <-- summaries will appear here
-└── logs/     <-- execution logs
+```bash
+mkdir -p input output
 ```
 
-```bash
-mkdir -p input output logs
-```
+That's it — `input/` for your files, `output/` for the summaries.
 
 ### Step 2 — Drop your files
 
