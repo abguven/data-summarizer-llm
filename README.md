@@ -107,6 +107,24 @@ Paste this Markdown directly into your LLM prompt — no file upload needed, no 
 
 ---
 
+## 🔍 Troubleshooting
+
+### `PermissionError` on Linux / macOS
+
+**Symptom:**
+
+```
+PermissionError: [Errno 13] Permission denied: '/app/data/output/...'
+```
+
+**Cause:** On Linux and macOS, if the `output/` folder doesn't exist before running the container, Docker creates it automatically as `root:root`. The container runs as a non-root user (`appuser`) and cannot write to it.
+
+**Fix:** Always create the folders yourself before running the container:
+
+```bash
+mkdir -p input output
+```
+
 ---
 
 ## 👩‍💻 For Developers
