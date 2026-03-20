@@ -102,7 +102,7 @@ Paste this Markdown directly into your LLM prompt — no file upload needed, no 
 
 | Feature | Detail |
 | :--- | :--- |
-| **Base Image** | `python:3.14.3-slim` (Debian) |
+| **Base Image** | `python:3.x-slim` (Debian, auto-updated weekly via Dependabot) |
 | **User** | `appuser` (UID 1000 / GID 1000) — non-root |
 | **Supported Formats** | `.csv`, `.parquet`, `.json`, `.xlsx`, `.xls` |
 | **Engine** | Polars (Rust-based) |
