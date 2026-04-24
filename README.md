@@ -102,7 +102,7 @@ Paste this Markdown directly into your LLM prompt — no file upload needed, no 
 
 | Feature | Detail |
 | :--- | :--- |
-| **Base Image** | `python:3.x-slim` (Debian, auto-updated weekly via Dependabot) |
+| **Base Image** | `python:3.x-slim` (Debian, auto-patched weekly — see [Release Pipeline](#release-pipeline)) |
 | **User** | `appuser` (UID 1000 / GID 1000) — non-root |
 | **Supported Formats** | `.csv`, `.parquet`, `.json`, `.xlsx`, `.xls` |
 | **Engine** | Polars (Rust-based) |
@@ -116,7 +116,7 @@ Paste this Markdown directly into your LLM prompt — no file upload needed, no 
 
 **Symptom:**
 
-```
+```text
 PermissionError: [Errno 13] Permission denied: '/app/data/output/...'
 ```
 
@@ -191,6 +191,16 @@ make demo
 # 3. Run the full test suite
 make test
 ```
+
+### Release Pipeline
+
+| Trigger | Workflow | Effect |
+| :--- | :--- | :--- |
+| Pull request → `main` | CI | Build image + run functional tests |
+| Dependabot merges to `main` | Auto Release | Build, test, push patch version (e.g. `v1.4.1`) + `latest` to Docker Hub |
+| Manual git tag `v*` | Release | Build, test, push versioned image + `latest` to Docker Hub |
+
+Security patches to the base OS are handled automatically — Dependabot opens a PR weekly, CI validates it, and a new patch version is published on Docker Hub without any manual action.
 
 ### Contributing
 

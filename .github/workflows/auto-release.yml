@@ -1,0 +1,73 @@
+name: Auto Release
+
+on:
+  push:
+    branches: [main]
+  workflow_dispatch:
+    inputs:
+      dry_run:
+        description: "Dry run — build and test only, no push to Docker Hub, no git tag"
+        type: boolean
+        default: true
+
+jobs:
+  auto-release:
+    if: github.actor == 'dependabot[bot]' || github.event_name == 'workflow_dispatch'
+    runs-on: ubuntu-latest
+
+    permissions:
+      contents: write
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Compute next patch version
+        id: version
+        run: |
+          LATEST=$(git tag --sort=-v:refname | grep '^v[0-9]\+\.[0-9]\+\.[0-9]\+$' | head -1)
+          if [ -z "$LATEST" ]; then
+            NEW_TAG="v1.0.1"
+          else
+            MAJOR=$(echo "$LATEST" | sed 's/v//' | cut -d. -f1)
+            MINOR=$(echo "$LATEST" | cut -d. -f2)
+            PATCH=$(echo "$LATEST" | cut -d. -f3)
+            NEW_TAG="v${MAJOR}.${MINOR}.$((PATCH + 1))"
+          fi
+          echo "tag=$NEW_TAG" >> "$GITHUB_OUTPUT"
+          echo "Next version: $NEW_TAG"
+
+      - name: Build image
+        run: |
+          docker build \
+            --build-arg APP_VERSION=${{ steps.version.outputs.tag }} \
+            -t data-summarizer:release .
+
+      - name: Run functional tests
+        run: bash tests/run_tests.sh data-summarizer:release
+
+      - name: Login to Docker Hub
+        if: ${{ github.event.inputs.dry_run != 'true' }}
+        uses: docker/login-action@v3
+        with:
+          username: ${{ secrets.DOCKERHUB_USERNAME }}
+          password: ${{ secrets.DOCKERHUB_TOKEN }}
+
+      - name: Push to Docker Hub
+        if: ${{ github.event.inputs.dry_run != 'true' }}
+        run: |
+          VERSION=${{ steps.version.outputs.tag }}
+          docker tag data-summarizer:release abguven/data-summarizer:$VERSION
+          docker tag data-summarizer:release abguven/data-summarizer:latest
+          docker push abguven/data-summarizer:$VERSION
+          docker push abguven/data-summarizer:latest
+
+      - name: Create git tag
+        if: ${{ github.event.inputs.dry_run != 'true' }}
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          git tag ${{ steps.version.outputs.tag }}
+          git push origin ${{ steps.version.outputs.tag }}
