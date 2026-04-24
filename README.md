@@ -212,4 +212,4 @@ Feel free to open issues or submit PRs. Ideas welcome:
 
 ---
 
-*Maintained by [abguven](https://github.com/abguven).*
+*Maintained by [abguven](https://abguven.eu).*
