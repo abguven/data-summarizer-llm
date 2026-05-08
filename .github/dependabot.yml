@@ -8,3 +8,6 @@ updates:
     labels:
       - "dependencies"
       - "docker"
+    ignore:
+      - dependency-name: "*"
+        versions: ["*a*", "*b*", "*rc*", "*alpha*", "*beta*"]
