@@ -12,7 +12,10 @@ on:
 
 jobs:
   auto-release:
-    if: github.actor == 'dependabot[bot]' || github.event_name == 'workflow_dispatch'
+    if: |
+      github.event_name == 'workflow_dispatch' ||
+      github.actor == 'dependabot[bot]' ||
+      contains(github.event.head_commit.message, 'bump python')
     runs-on: ubuntu-latest
 
     permissions:
