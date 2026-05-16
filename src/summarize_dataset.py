@@ -122,7 +122,7 @@ def analyze_and_summarize(df: pl.DataFrame, filename: str):
             "missing": f"{s.null_count() / df.height:.1%}",
             "unique": s.n_unique(),
             "stats": "",
-            "examples": str(s.drop_nulls().head(3).to_list()).replace("[", "").replace("]", "")
+            "examples": str(s.filter(s.is_not_null()).head(3).to_list()).replace("[", "").replace("]", "")
         }
 
         # Numeric Stats & Histogram
