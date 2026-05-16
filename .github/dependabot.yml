@@ -6,5 +6,5 @@ updates:
       interval: weekly
       day: monday
     ignore:
-      - dependency-name: "*"
-        versions: ["*a*", "*b*", "*rc*", "*alpha*", "*beta*"]
+      - dependency-name: "python"
+        update-types: ["version-update:semver-major", "version-update:semver-minor"]
