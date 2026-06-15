@@ -1,5 +1,5 @@
 # --- Build stage ---
-FROM python:3.14.5-slim AS build
+FROM python:3.14.6-slim AS build
 
 WORKDIR /app
 
@@ -13,7 +13,7 @@ COPY requirements.txt .
 RUN pip install --prefix=/install --no-cache-dir -r requirements.txt
 
 # --- Final stage ---
-FROM python:3.14.5-slim
+FROM python:3.14.6-slim
 
 ARG APP_VERSION=dev
 
