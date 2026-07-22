@@ -102,11 +102,11 @@ Paste this Markdown directly into your LLM prompt — no file upload needed, no 
 
 | Feature | Detail |
 | :--- | :--- |
-| **Base Image** | `python:3.x-slim` (Debian, auto-patched weekly — see [Release Pipeline](#release-pipeline)) |
+| **Base Image** | `python:3.x-alpine` (Alpine Linux, auto-patched weekly — see [Release Pipeline](#release-pipeline)) |
 | **User** | `appuser` (UID 1000 / GID 1000) — non-root |
 | **Supported Formats** | `.csv`, `.parquet`, `.json`, `.xlsx`, `.xls` |
 | **Engine** | Polars (Rust-based) |
-| **Image Size** | ~90MB compressed (multi-stage build) |
+| **Image Size** | ~82MB compressed (multi-stage build) |
 
 ---
 

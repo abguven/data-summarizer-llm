@@ -1,24 +1,22 @@
 # --- Build stage ---
-FROM python:3.14.6-slim AS build
+FROM python:3.14.6-alpine AS build
 
 WORKDIR /app
-
-# Installer gcc uniquement pour la compilation des dépendances
-RUN apt-get update && apt-get install -y --no-install-recommends gcc && \
-    rm -rf /var/lib/apt/lists/*
 
 COPY requirements.txt .
 
 # Installer les dépendances Python dans /install
+# (polars, fastexcel et xlsx2csv fournissent des wheels musllinux precompilees,
+# donc pas besoin de gcc/musl-dev ici)
 RUN pip install --prefix=/install --no-cache-dir -r requirements.txt
 
 # --- Final stage ---
-FROM python:3.14.6-slim
+FROM python:3.14.6-alpine
 
 ARG APP_VERSION=dev
 
 # Apply all available OS security patches
-RUN apt-get update && apt-get upgrade -y && rm -rf /var/lib/apt/lists/*
+RUN apk update && apk upgrade --no-cache
 
 # Metadata OCI
 LABEL org.opencontainers.image.title="Data Summarizer for LLM"
@@ -43,7 +41,7 @@ COPY --from=build /install /usr/local
 COPY src/ ./src/
 
 # Créer un utilisateur non-root
-RUN useradd -m -u 1000 appuser && \
+RUN adduser -D -u 1000 appuser && \
     mkdir -p /app/data/input /app/data/output /app/logs && \
     chown -R appuser:appuser /app && \
     chmod 700 /app/data/input /app/data/output /app/logs
