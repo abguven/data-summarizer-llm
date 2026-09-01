@@ -11,10 +11,52 @@ jobs:
     permissions:
       pull-requests: write
       contents: write
+      actions: write
 
     steps:
-      - name: Enable auto-merge
-        run: gh pr merge --auto --merge "$PR_URL"
+      # gh pr merge --auto only enables GitHub's async auto-merge queue — it
+      # returns immediately and the actual merge can happen much later, outside
+      # this job. Waiting for checks here means we merge synchronously and know
+      # for certain when the merge commit exists.
+      #
+      # ci.yml triggers on the same pull_request event, so its check run may
+      # not be registered yet when this step starts, and `gh pr checks --watch`
+      # errors out immediately ("no checks reported") instead of waiting for
+      # checks to appear. Probe first until a check exists, THEN watch it for
+      # real (so an actual CI failure fails this step instead of being retried).
+      - name: Wait for checks to appear
+        run: |
+          for i in $(seq 1 30); do
+            output=$(gh pr checks "$PR_URL" 2>&1) && break
+            if echo "$output" | grep -q "no checks reported"; then
+              echo "No checks reported yet, retrying in 10s..."
+              sleep 10
+              continue
+            fi
+            break
+          done
         env:
           PR_URL: ${{ github.event.pull_request.html_url }}
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Wait for required checks to pass
+        run: gh pr checks "$PR_URL" --watch
+        env:
+          PR_URL: ${{ github.event.pull_request.html_url }}
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Merge PR
+        run: gh pr merge --merge "$PR_URL"
+        env:
+          PR_URL: ${{ github.event.pull_request.html_url }}
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+      # Merging with GITHUB_TOKEN does not fire the push trigger on
+      # auto-release.yml (GitHub suppresses recursive triggers from
+      # GITHUB_TOKEN-authenticated events). workflow_dispatch is exempt from
+      # that restriction, so we call it explicitly instead of relying on the
+      # push event.
+      - name: Trigger release build
+        run: gh workflow run auto-release.yml --ref main -f dry_run=false
+        env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
