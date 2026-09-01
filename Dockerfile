@@ -18,6 +18,13 @@ ARG APP_VERSION=dev
 # Apply all available OS security patches
 RUN apk update && apk upgrade --no-cache
 
+# Remove pip from the final image: it's only needed to install dependencies
+# during the build stage, and its vendored deps (msgpack, setuptools) show up
+# as unfixable CVEs on a package we never actually run.
+RUN rm -rf /usr/local/lib/python3.14/site-packages/pip \
+           /usr/local/lib/python3.14/site-packages/pip-*.dist-info \
+           /usr/local/lib/python3.14/ensurepip
+
 # Metadata OCI
 LABEL org.opencontainers.image.title="Data Summarizer for LLM"
 LABEL org.opencontainers.image.description="CLI tool to analyze and summarize datasets (CSV, Excel, JSON) for LLM context injection."
