@@ -17,3 +17,35 @@ jobs:
 
       - name: Run functional tests
         run: bash tests/run_tests.sh data-summarizer:ci
+
+  # Chained with `needs` instead of polling PR checks: a poller would wait on its own check.
+  dependabot-release:
+    needs: test
+    if: github.actor == 'dependabot[bot]'
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+
+    permissions:
+      contents: write
+      pull-requests: write
+      actions: write
+
+    env:
+      GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      GH_REPO: ${{ github.repository }}
+      PR_URL: ${{ github.event.pull_request.html_url }}
+
+    steps:
+      - name: Merge PR
+        run: |
+          for i in 1 2 3 4 5; do
+            gh pr merge --merge "$PR_URL" && exit 0
+            [ "$(gh pr view "$PR_URL" --json state --jq .state)" = "MERGED" ] && exit 0
+            echo "Merge attempt $i failed, retrying in 15s..."
+            sleep 15
+          done
+          exit 1
+
+      # GITHUB_TOKEN merges don't fire auto-release.yml's push trigger; workflow_dispatch does.
+      - name: Trigger release
+        run: gh workflow run auto-release.yml --ref main -f dry_run=false
