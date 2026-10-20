@@ -196,11 +196,12 @@ make test
 
 | Trigger | Workflow | Effect |
 | :--- | :--- | :--- |
-| Pull request → `main` | CI | Build image + run functional tests |
-| Dependabot merges to `main` | Auto Release | Build, test, push patch version (e.g. `v1.4.1`) + `latest` to Docker Hub |
+| Pull request → `main` | CI | Build image + run functional tests. Dependabot PRs that pass are merged automatically |
+| Dependabot PR merged by CI | Auto Release | Build, test, push patch version (e.g. `v1.4.1`) + `latest` to Docker Hub |
+| Manual run (Actions tab) | Auto Release | Same as above, on demand (`dry_run` to build and test only) |
 | Manual git tag `v*` | Release | Build, test, push versioned image + `latest` to Docker Hub |
 
-Security patches to the base OS are handled automatically — Dependabot opens a PR weekly, CI validates it, and a new patch version is published on Docker Hub without any manual action.
+Security patches to the base OS are handled automatically — Dependabot opens a PR weekly, CI validates and merges it, then triggers a new patch release on Docker Hub without any manual action.
 
 ### Contributing
 
