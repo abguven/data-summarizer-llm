@@ -1,5 +1,5 @@
 # --- Build stage ---
-FROM python:3.14.8-alpine AS build
+FROM python:3.14.9-alpine AS build
 
 WORKDIR /app
 
@@ -11,7 +11,7 @@ COPY requirements.txt .
 RUN pip install --prefix=/install --no-cache-dir -r requirements.txt
 
 # --- Final stage ---
-FROM python:3.14.8-alpine
+FROM python:3.14.9-alpine
 
 ARG APP_VERSION=dev
 
