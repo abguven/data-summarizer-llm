@@ -198,10 +198,14 @@ make test
 | :--- | :--- | :--- |
 | Pull request → `main` | CI | Build image + run functional tests. Dependabot PRs that pass are merged automatically |
 | Dependabot PR merged by CI | Auto Release | Build, test, push patch version (e.g. `v1.4.1`) + `latest` to Docker Hub |
+| Weekly schedule (Tuesday) | Auto Release | Rebuild with the latest Alpine patches; publish a patch version only if installed packages changed |
 | Manual run (Actions tab) | Auto Release | Same as above, on demand (`dry_run` to build and test only) |
 | Manual git tag `v*` | Release | Build, test, push versioned image + `latest` to Docker Hub |
 
-Security patches to the base OS are handled automatically — Dependabot opens a PR weekly, CI validates and merges it, then triggers a new patch release on Docker Hub without any manual action.
+Security patches are handled automatically, without any manual action:
+
+- **Python base image:** Dependabot opens a PR weekly, CI validates and merges it, then triggers a new patch release on Docker Hub.
+- **Alpine packages:** a weekly rebuild applies `apk upgrade` and publishes a new patch release only if packages differ from the image on Docker Hub.
 
 ### Contributing
 
